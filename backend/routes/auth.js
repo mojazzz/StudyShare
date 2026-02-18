@@ -2,6 +2,8 @@ const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs'); // ตัวช่วยเข้ารหัส
 const jwt = require('jsonwebtoken'); // ตัวช่วยทำบัตรผ่าน
+const Course = require('../models/Course'); // <--- ต้องใช้เพื่อไปค้นรีวิว
+const auth = require('../middleware/auth');
 
 // -----------------------------------------------------
 // 1. REGISTER (สมัครสมาชิก) -> POST /api/auth/register
@@ -79,6 +81,67 @@ router.post('/login', async (req, res) => {
 
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/auth/me (ดึงข้อมูลโปรไฟล์ + ประวัติการรีวิว/อัปโหลด)
+router.get('/me', auth, async (req, res) => {
+  try {
+    // 1. หาข้อมูล User (ตัด password ออก ไม่ส่งไป)
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) return res.status(404).json({ msg: 'User not found' });
+
+    // 2. หา Course ที่ User คนนี้เคยไปรีวิว หรือ อัปโหลดไฟล์ไว้
+    // (Logic นี้อาจจะไม่เร็วที่สุด แต่ใช้ได้สำหรับโปรเจกต์นักศึกษา)
+    const courses = await Course.find({
+      $or: [
+        { 'reviews.user': req.user.id },
+        { 'files.uploadedBy': req.user.id }
+      ]
+    });
+
+    // 3. แยกแยะออกมาเฉพาะของ User คนนี้
+    let myReviews = [];
+    let myFiles = [];
+
+    courses.forEach(course => {
+      // เก็บรวบรวมรีวิวของฉัน
+      const userReviews = course.reviews
+        .filter(r => r.user.toString() === req.user.id)
+        .map(r => ({
+          ...r.toObject(),
+          courseName: course.courseName,
+          courseCode: course.courseCode,
+          courseId: course._id
+        }));
+      myReviews.push(...userReviews);
+
+      // เก็บรวบรวมไฟล์ของฉัน
+      const userFiles = course.files
+        .filter(f => f.uploadedBy.toString() === req.user.id)
+        .map(f => ({
+          ...f.toObject(),
+          courseName: course.courseName,
+          courseCode: course.courseCode,
+          courseId: course._id
+        }));
+      myFiles.push(...userFiles);
+    });
+
+    // ส่งกลับไปให้ Frontend
+    res.json({
+      user,
+      stats: {
+        reviewCount: myReviews.length,
+        fileCount: myFiles.length
+      },
+      myReviews,
+      myFiles
+    });
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
 });
 
