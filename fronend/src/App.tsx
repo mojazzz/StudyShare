@@ -26,7 +26,7 @@ function App() {
       try {
         // ยิงไปเช็คกับ Backend ว่า Token นี้ยังใช้ได้ไหม?
         // (เราใช้ Route /me เพราะมันต้องใช้ Token ในการเข้าถึง)
-        await axios.get('http://localhost:5000/api/auth/me', {
+        await axios.get('https://studyshare-g48x.onrender.com/api/auth/me', {
           headers: { 'x-auth-token': token }
         });
 

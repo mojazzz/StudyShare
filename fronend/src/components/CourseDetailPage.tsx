@@ -39,7 +39,7 @@ export default function CourseDetailPage({ onLogout }: { onLogout: () => void })
 
   const fetchCourseData = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/courses/${id}`);
+      const res = await axios.get(`https://studyshare-g48x.onrender.com/api/courses/${id}`);
       setCourse(res.data);
     } catch (err) {
       console.error("Error loading course:", err);
@@ -63,7 +63,7 @@ export default function CourseDetailPage({ onLogout }: { onLogout: () => void })
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`http://localhost:5000/api/courses/${id}/upload`, formData, {
+      await axios.post(`https://studyshare-g48x.onrender.com/api/courses/${id}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'x-auth-token': token
@@ -82,7 +82,7 @@ export default function CourseDetailPage({ onLogout }: { onLogout: () => void })
   const handleDownload = (filePath: string) => {
     if (!filePath) return; // กันพังถ้าไม่มี path
     const cleanPath = filePath.replace(/^uploads[\\/]/, '');
-    const url = `http://localhost:5000/uploads/${cleanPath}`;
+    const url = `https://studyshare-g48x.onrender.com/uploads/${cleanPath}`;
     window.open(url, '_blank');
   };
 
@@ -90,7 +90,7 @@ export default function CourseDetailPage({ onLogout }: { onLogout: () => void })
     if (!confirm("แน่ใจนะว่าจะลบไฟล์นี้? ลบแล้วกู้ไม่ได้นะ!")) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/courses/${id}/files/${fileId}`, {
+      await axios.delete(`https://studyshare-g48x.onrender.com/api/courses/${id}/files/${fileId}`, {
         headers: { 'x-auth-token': token }
       });
       toast.success("ลบไฟล์เรียบร้อยแล้ว!");
@@ -104,7 +104,7 @@ export default function CourseDetailPage({ onLogout }: { onLogout: () => void })
     if (!confirm("จะลบรีวิวจริงๆ เหรอ?")) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/courses/${id}/reviews/${reviewId}`, {
+      await axios.delete(`https://studyshare-g48x.onrender.com/api/courses/${id}/reviews/${reviewId}`, {
         headers: { 'x-auth-token': token }
       });
       fetchCourseData();

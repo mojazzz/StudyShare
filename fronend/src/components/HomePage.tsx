@@ -27,7 +27,7 @@ export default function HomePage({ onLogout }: HomePageProps) {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/courses');
+        const res = await axios.get('https://studyshare-g48x.onrender.com/api/courses');
         
         const mappedCourses = res.data.map((c: any) => ({
           id: c._id,                 

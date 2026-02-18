@@ -13,7 +13,7 @@ export default function ProfilePage({ onLogout }: { onLogout: () => void }) {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:5000/api/auth/me', {
+        const res = await axios.get('https://studyshare-g48x.onrender.com/api/auth/me', {
           headers: { 'x-auth-token': token }
         });
         setProfile(res.data);

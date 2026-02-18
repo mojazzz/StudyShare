@@ -33,7 +33,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     setIsLoading(true);
 
     try {
-      const backendUrl = 'http://localhost:5000/api/auth'; // ตรวจสอบ Port Backend ดีๆ นะ
+      const backendUrl = 'https://studyshare-g48x.onrender.com/api/auth'; // ตรวจสอบ Port Backend ดีๆ นะ
 
       if (isLogin) {
         // --- LOGIC: LOGIN ---

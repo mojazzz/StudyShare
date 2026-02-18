@@ -25,7 +25,7 @@ export default function CreateReviewModal({ isOpen, onClose, onReviewSuccess }: 
   // 1. โหลดรายวิชาทั้งหมดมาใส่ Dropdown (จะได้เลือกวิชาที่จะรีวิวถูก)
   useEffect(() => {
     if (isOpen) {
-      axios.get('http://localhost:5000/api/courses')
+      axios.get('https://studyshare-g48x.onrender.com/api/courses')
         .then(res => {
             // Map ข้อมูลให้ตรงกับ format ที่เราใช้
             const mappedCourses = res.data.map((c: any) => ({
@@ -56,7 +56,7 @@ export default function CreateReviewModal({ isOpen, onClose, onReviewSuccess }: 
       // 2. ยิง API ส่งรีวิว (ต้องไปทำ Route นี้ใน Backend ด้วยนะ!)
       // สมมติว่า Backend รับ POST /api/courses/:id/reviews
       await axios.post(
-        `http://localhost:5000/api/courses/${selectedCourseId}/reviews`,
+        `https://studyshare-g48x.onrender.com/api/courses/${selectedCourseId}/reviews`,
         {
           rating: rating,
           comment: reviewText
