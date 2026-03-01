@@ -121,6 +121,9 @@ export default function HomePage({ onLogout }: HomePageProps) {
                 <option value="1">1 Credit</option>
                 <option value="2">2 Credits</option>
                 <option value="3">3 Credits</option>
+                <option value="3">4 Credits</option>
+                <option value="3">5 Credits</option>
+                <option value="3">6 Credits</option>
               </select>
             </div>
           </div>
