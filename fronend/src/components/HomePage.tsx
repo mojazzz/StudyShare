@@ -35,7 +35,7 @@ export default function HomePage({ onLogout }: HomePageProps) {
           code: c.courseCode,        
           category: c.category,
           description: c.description || 'No description',
-          credits: c.credits || 3,   
+          credits: c.credits || 6,   
           fullDescription: c.description || 'No detail description',
           instructor: c.instructor || 'TBA',
           averageRating: c.averageRating || 0,
