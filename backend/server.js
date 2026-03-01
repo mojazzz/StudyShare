@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
+const express = require('express');
 
 const app = express();
 
@@ -10,7 +11,7 @@ const app = express();
 app.use(express.json()); // อ่าน JSON ได้
 app.use(cors()); // ให้ Frontend เรียกหาได้
 // อนุญาตให้เข้าถึงไฟล์ในโฟลเดอร์ uploads ผ่าน URL /uploads ได้
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // เชื่อมต่อ MongoDB Atlas [cite: 35, 40]
 mongoose.connect(process.env.MONGO_URI)
